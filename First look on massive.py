@@ -5,6 +5,6 @@ Age = int(input())
 print ('Please, enter your ocupations')
 Job = str(input())
 Lempl = [Name, Age, Job]
-print (Lempl)
+print ('Thats your answers',Lempl)
 print("Press Enter to continue ...")
 input()
