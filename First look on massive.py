@@ -5,6 +5,21 @@ Age = int(input())
 print ('Please, enter your ocupations')
 Job = str(input())
 Lempl = [Name, Age, Job]
+print ('Your answers is:')
+print (Lempl[0] + '- Name')
+print (str(Lempl[1]) + '- Age')
+print (Lempl[2] + '- Job')
+print ('If you what to change the information type what do you what to change bellow: (1 - Name, 2 - Age, 3 - Occupation)')
+Choose = int(input())
+if Choose == 1:
+    print ('Please, enter your name')
+    Name = str(input())
+elif Choose == 2:
+    print ('Please, enter your age')
+    Age = int(input())
+elif Choose == 3:
+    print ('Please, enter your ocupations')
+    Job = str(input())
 print ('Thats your answers',Lempl)
 print("Press Enter to continue ...")
 input()
