@@ -11,7 +11,12 @@ print (str(L[1]) + ' - Age')
 print (L[2] + ' - Job')
 print ('If you what to change the information type what do you what to change bellow:\n1 - Name\n2 - Age\n3 - Occupation\n')
 print ('If all data is correct please type: 0')
-Choose = int(input())
+ChooseInput = input()
+if ChooseInput.isalpha ():
+    print ('Please type number, not the word')
+    Choose = int(input())
+else:
+    Choose = int(ChooseInput)
 while Choose in range (1,4):
     if Choose == 1:
         print ('Please, enter your name')
@@ -29,7 +34,7 @@ while Choose in range (1,4):
     print (L[0] + ' - Name')
     print (str(L[1]) + ' - Age')
     print (L[2] + ' - Job')
-    
+
     print ('If all data is correct please type: 0')
     print ('If not choose option again:\n1 - Name\n2 - Age\n3 - Occupation\n')
     Choose = int(input())
