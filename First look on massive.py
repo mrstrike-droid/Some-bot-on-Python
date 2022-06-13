@@ -1,7 +1,15 @@
 print ('Please, enter your name')
 Name = str(input())
 print ('Please, enter your age')
-Age = int(input())
+while True:
+    try:
+        Age = int(input())
+        break
+    except ValueError:
+        print ('Please enter the number')
+while Age <= 0:
+    print ('Dont be so negative, enter real age')
+    Age = int(input())
 print ('Please, enter your ocupations')
 Job = str(input())
 L = [Name, Age, Job]
