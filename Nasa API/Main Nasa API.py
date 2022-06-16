@@ -15,7 +15,7 @@ def getimagine():
             else:
                 r.raise_for_status()    
         except requests.exceptions.HTTPError as err:
-            print (err)     
+            print (err)    
 print('Please specifie the date in such way: YYYY-MM-DD. Actual on current or previous days')
 getimagine()
 input()
