@@ -8,7 +8,7 @@ def getimagine():
             r = requests.get(f'https://api.nasa.gov/planetary/apod?api_key=Zex7CBAHQmbVfomUeIOyZXt9d8JccD4R50fNNhal&date={date}')
             parsed = r.json()
             if r.status_code == 200:
-                url = parsed['hdurl']
+                url = parsed['url']
                 img = requests.get (url)
                 text = parsed['explanation'] 
                 ext = img.headers["content-type"][6:]
