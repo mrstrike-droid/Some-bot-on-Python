@@ -10,17 +10,23 @@ def getimagine():
             if r.status_code == 200:
                 print (parsed)
                 url = parsed['hdurl']
-                img = requests.get (url) 
+                img = requests.get (url)
+                text = parsed['explanation'] 
                 ext = img.headers["content-type"][6:]
+                exttext = 'txt'
                 print ('Chose your directory to save:(Click on the path bar of the Windows Explorer and tap Ctrl+C and then Ctrl+V)')
                 os.chdir(input())
                 os.makedirs(f'Nasa imagine/{date} Imagine of a day')
-                path = os.path.join(os.getcwd(), f'Nasa imagine/{date} Imagine of a day',f'img{date}.{ext}')
-                with open (path, 'wb') as f:
+                pathimg = os.path.join(os.getcwd(), f'Nasa imagine/{date} Imagine of a day',f'img{date}.{ext}')
+                pathtext = os.path.join(os.getcwd(), f'Nasa imagine/{date} Imagine of a day',f'text{date}.{exttext}')
+                with open (pathimg, 'wb') as f:
                     for chunk in img:
                         f.write(chunk) 
+                with open (pathtext, 'w') as f:
+                    f.write(text)
                 print ('Done!')
-                os.system("start" + path)           
+                os.startfile(pathimg) 
+                os.startfile(pathtext)        
             elif r.status_code == 400:
                 print ('Wrong date type input: YYYY-MM-DD')
             else:
