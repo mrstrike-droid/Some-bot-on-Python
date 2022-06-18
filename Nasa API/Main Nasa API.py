@@ -8,8 +8,8 @@ def getimagine():
             r = requests.get(f'https://api.nasa.gov/planetary/apod?api_key=Zex7CBAHQmbVfomUeIOyZXt9d8JccD4R50fNNhal&date={date}')
             parsed = r.json()
             if r.status_code == 200:
-                img = requests.get (url)
                 url = parsed['hdurl']
+                img = requests.get (url)
                 text = parsed['explanation'] 
                 ext = img.headers["content-type"][6:]
                 exttext = 'txt'
@@ -25,15 +25,22 @@ def getimagine():
                     f.write(text)
                 print ('Done!')
                 os.startfile(pathimg) 
-                os.startfile(pathtext)        
+                os.startfile(pathtext)
+                break        
             elif r.status_code == 400:
                 print ('Wrong date type input: YYYY-MM-DD')
             else:
                 r.raise_for_status()    
         except requests.exceptions.HTTPError as err:
             print (err)
-print('Please specifie the date in such way: YYYY-MM-DD. Actual on current or previous days')
-getimagine()
-
+def repeatprogramm():
+    chooseoption = 1
+    while chooseoption == 1:
+        print('Please specifie the date in such way: YYYY-MM-DD. Actual on current or previous days')
+        getimagine()
+        print ('If you want to start again press: 1\n' + 'If not, press: 2')
+        chooseoption = int(input())
+if __name__ == "__main__":
+    repeatprogramm()
 
 
