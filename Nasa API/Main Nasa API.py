@@ -11,12 +11,10 @@ def getimagine():
                 url = parsed['url']
                 img = requests.get (url)
                 text = parsed['explanation'] 
-                ext = img.headers["content-type"][6:]
+                extimg = img.headers["content-type"][6:]
                 exttext = 'txt'
-                print ('Chose your directory to save:(Click on the path bar of the Windows Explorer and tap Ctrl+C and then Ctrl+V)')
-                os.chdir(input())
                 os.makedirs(f'Nasa imagine/{date} Imagine of a day')
-                pathimg = os.path.join(os.getcwd(), f'Nasa imagine/{date} Imagine of a day',f'img{date}.{ext}')
+                pathimg = os.path.join(os.getcwd(), f'Nasa imagine/{date} Imagine of a day',f'img{date}.{extimg}')
                 pathtext = os.path.join(os.getcwd(), f'Nasa imagine/{date} Imagine of a day',f'text{date}.{exttext}')
                 with open (pathimg, 'wb') as f:
                     for chunk in img:
@@ -41,6 +39,8 @@ def repeatprogramm():
         print ('If you want to start again press: 1\n' + 'If not, press: 2')
         chooseoption = int(input())
 if __name__ == "__main__":
+    print ('Chose your directory to save files:(Click on the path bar of the Windows Explorer and tap Ctrl+C and then Ctrl+V)')
+    os.chdir(input())
     repeatprogramm()
 
 
