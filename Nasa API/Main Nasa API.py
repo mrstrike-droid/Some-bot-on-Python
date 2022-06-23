@@ -6,10 +6,10 @@ def firstchoose():
     global r
     global date
     try:
-        print('Please specifie the date in such way: YYYY-MM-DD. Actual on current or previous days')
-        date = input()
-        r = requests.get(f'https://api.nasa.gov/planetary/apod?api_key=Zex7CBAHQmbVfomUeIOyZXt9d8JccD4R50fNNhal&date={date}')
         while True:
+            print('Please specifie the date in such way: YYYY-MM-DD. Actual on current or previous days')
+            date = input()
+            r = requests.get(f'https://api.nasa.gov/planetary/apod?api_key=Zex7CBAHQmbVfomUeIOyZXt9d8JccD4R50fNNhal&date={date}')
             parsed = r.json()
             if r.status_code == 200:
                 url = parsed['url']
@@ -28,7 +28,9 @@ def firstchoose():
                 print ('Done!')
                 os.startfile(pathimg) 
                 os.startfile(pathtext)
-                break                                  
+                break 
+            elif r.status_code == 400:
+                print ('Wrong date format')                               
     except ValueError:
         print('Please enter: 1 or 2')
     except requests.exceptions.HTTPError as err:
@@ -36,30 +38,35 @@ def firstchoose():
 def secondoption():
     global startdate
     global enddate
-    try:
-        print('Please specifie the date in such way: YYYY-MM-DD. First date enter, then last date.')
-        startdate = input()
-        enddate = input()
-        r = requests.get(f'https://api.nasa.gov/planetary/apod?api_key=Zex7CBAHQmbVfomUeIOyZXt9d8JccD4R50fNNhal&start_date={startdate}&end_date={enddate}')
-        parsed = r.json()
-        print('It will take some time. Please wait.')
-        for x in parsed:
-            url = x
-            url1 = url['url']
-            text1 = url['explanation']
-            date1 = url['date']
-            img = requests.get (url1)
-            extimg = img.headers["content-type"][6:]
-            exttext = 'txt'
-            os.makedirs(f'Nasa imagine/{date1} Imagine of a day')
-            pathimg = os.path.join(os.getcwd(), f'Nasa imagine/{date1} Imagine of a day',f'img{date1}.{extimg}')
-            pathtext = os.path.join(os.getcwd(), f'Nasa imagine/{date1} Imagine of a day',f'text{date1}.{exttext}')
-            with open (pathimg, 'wb') as f:
-                for chunk in img:
-                    f.write(chunk) 
-            with open (pathtext, 'w') as f:
-                f.write(text1)
-        print ('Done!')
+    try:   
+        while True:      
+            print('Please specifie the date in such way: YYYY-MM-DD. First date enter, then last date.')
+            startdate = input()
+            enddate = input()
+            r = requests.get(f'https://api.nasa.gov/planetary/apod?api_key=Zex7CBAHQmbVfomUeIOyZXt9d8JccD4R50fNNhal&start_date={startdate}&end_date={enddate}')                           
+            parsed = r.json()
+            if r.status_code == 200:
+                print('It will take some time. Please wait.')
+                for x in parsed:
+                    url = x
+                    url1 = url['url']
+                    text1 = url['explanation']
+                    date1 = url['date']
+                    img = requests.get (url1)
+                    extimg = img.headers["content-type"][6:]
+                    exttext = 'txt'
+                    os.makedirs(f'Nasa imagine/{date1} Imagine of a day')
+                    pathimg = os.path.join(os.getcwd(), f'Nasa imagine/{date1} Imagine of a day',f'img{date1}.{extimg}')
+                    pathtext = os.path.join(os.getcwd(), f'Nasa imagine/{date1} Imagine of a day',f'text{date1}.{exttext}')
+                    with open (pathimg, 'wb') as f:
+                        for chunk in img:
+                            f.write(chunk) 
+                    with open (pathtext, 'w') as f:
+                        f.write(text1)
+                print ('Done!')
+                break
+            elif r.status_code == 400:
+                print ('Wrong date format')
     except ValueError:
         print('Please enter: 1 or 2')
     except requests.exceptions.HTTPError as err:
