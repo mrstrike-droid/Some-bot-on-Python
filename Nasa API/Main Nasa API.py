@@ -3,8 +3,6 @@ from urllib import response
 import requests
 import os
 def firstchoose():
-    global r
-    global date
     try:
         while True:
             print('Please specifie the date in such way: YYYY-MM-DD. Actual on current or previous days')
@@ -36,8 +34,6 @@ def firstchoose():
     except requests.exceptions.HTTPError as err:
         print (err)
 def secondoption():
-    global startdate
-    global enddate
     try:   
         while True:      
             print('Please specifie the date in such way: YYYY-MM-DD. First date enter, then last date.')
