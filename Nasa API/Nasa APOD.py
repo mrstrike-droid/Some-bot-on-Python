@@ -44,10 +44,9 @@ def secondoption():
             if r.status_code == 200:
                 print('It will take some time. Please wait.')
                 for x in parsed:
-                    url = x
-                    url1 = url['url']
-                    text1 = url['explanation']
-                    date1 = url['date']
+                    url1 = x['url']
+                    text1 = x['explanation']
+                    date1 = x['date']
                     img = requests.get (url1)
                     extimg = img.headers["content-type"][6:]
                     exttext = 'txt'

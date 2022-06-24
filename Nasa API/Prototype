@@ -1,0 +1,18 @@
+import requests
+import os
+import json
+def getimage():
+    print('Please enter the date from 0 sol to 1000, or maybe more')
+    sol = input()
+    r = requests.get (f'https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?sol={sol}&api_key=Zex7CBAHQmbVfomUeIOyZXt9d8JccD4R50fNNhal')
+    parsed = r.json()
+    print (parsed)
+    Parsed_dict = parsed['photos']
+    for i in Parsed_dict:
+        url1 = i['img_src']
+        camera = i['camera']
+        sol1 = i['sol']
+        earth_date = i['earth_date']
+        rover = i['rover']
+        print ('sol:' + str(sol1) + 'Earth date:' + str(earth_date) + str(rover) + str(camera) + str(url1))
+getimage()
