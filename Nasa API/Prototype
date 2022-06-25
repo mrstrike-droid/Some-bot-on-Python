@@ -1,18 +1,41 @@
+from matplotlib import path
 import requests
 import os
-import json
+from PIL import Image, ImageFont, ImageDraw 
 def getimage():
+    print ('Chose your directory to save files:(Click on the path bar of the Windows Explorer and tap Ctrl+C and then Ctrl+V)')
+    os.chdir(input())
     print('Please enter the date from 0 sol to 1000, or maybe more')
     sol = input()
+    os.makedirs(f'Nasa imagine/Imagine of a sol {sol}')
     r = requests.get (f'https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?sol={sol}&api_key=Zex7CBAHQmbVfomUeIOyZXt9d8JccD4R50fNNhal')
     parsed = r.json()
-    print (parsed)
     Parsed_dict = parsed['photos']
     for i in Parsed_dict:
         url1 = i['img_src']
+        identificator = i['id']
+        img = requests.get (url1)
+        extimg = img.headers["content-type"][6:]
+        pathimg = os.path.join(os.getcwd(), f'Nasa imagine/Imagine of a sol {sol}',f'img{sol}{identificator}.{extimg}')
+        with open (pathimg, 'wb') as f:
+            for chunk in img:
+                    f.write(chunk) 
         camera = i['camera']
+        nameofcamera = camera['name']
         sol1 = i['sol']
         earth_date = i['earth_date']
         rover = i['rover']
-        print ('sol:' + str(sol1) + 'Earth date:' + str(earth_date) + str(rover) + str(camera) + str(url1))
+        roveridentificator = rover['id']
+        rovername = rover ['name']
+        landing_date = rover['landing_date']
+        launch_date = rover['launch_date']
+        status = rover['status']
+        end = '\n'
+        print ('sol: ' + str(sol1)+ end + 'Earth date: ' + str(earth_date)+ end + 'Id of rover: '+ str(roveridentificator) + end + 'Name of rover: '+ str(rovername) + end + 'Lauching date: ' + str(launch_date) + 'Landing date: '+ str(landing_date) + end + 'Mission status: '+ str(status) + end + 'Name of camera: ' + str(nameofcamera) + end + str(url1))
+        my_image = Image.open(pathimg)
+        title_font = ImageFont.load_default()
+        title_text = 'sol: ' + str(sol1)+ end + 'Earth date: ' + str(earth_date)+ end + 'Id of rover: '+ str(roveridentificator) + end + 'Name of rover: '+ str(rovername) + end + 'Landing date: '+ str(landing_date) + end + 'Lauching date: ' + str(launch_date) + end + 'Mission status: '+ str(status) + end + 'Name of camera: ' + str(nameofcamera)
+        image_editable = ImageDraw.Draw(my_image)
+        image_editable.text((15,15), title_text, stroke_fill=0, font=title_font)
+        my_image.save(pathimg)
 getimage()
