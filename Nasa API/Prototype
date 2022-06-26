@@ -34,11 +34,15 @@ def getimage():
                     status = rover['status']
                     end = '\n'
                     my_image = Image.open(pathimg)
-                    font = ImageFont.load_default()
                     title_text = 'sol: ' + str(sol1)+ end + 'Earth date: ' + str(earth_date)+ end + 'Id of rover: '+ str(roveridentificator) + end + 'Name of rover: '+ str(rovername) + end + 'Lauching date: ' + str(launch_date) + end + 'Landing date: '+ str(landing_date) + end + 'Mission status: '+ str(status) + end + 'Name of camera: ' + str(nameofcamera)
-                    image_editable = ImageDraw.Draw(my_image)
-                    image_editable.text((20,20), title_text, font=font)
-                    my_image.save(pathimg)
+                    width, height = my_image.size
+                    if width >= 1024 & height >= 1024:
+                        font = ImageFont.load_default()
+                        image_editable = ImageDraw.Draw(my_image)
+                        image_editable.text((20,20), title_text, font=font)
+                        my_image.save(pathimg)
+                    elif width <= 256 & height <= 256:
+                        break
                 break
             elif r.status_code == 400:
                 print ('Wrong date format')  
