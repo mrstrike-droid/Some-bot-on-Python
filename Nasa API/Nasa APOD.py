@@ -66,7 +66,7 @@ def secondoption():
         print('Please enter: 1 or 2')
     except requests.exceptions.HTTPError as err:
         print (err)                     
-def repeatprogramm():
+def repeat_programm():
     repeatprogramm = 1
     while repeatprogramm == 1:
         print ('If you want to find image for specific date enter: 1\nIf you want to get image for some period enter: 2')
@@ -82,4 +82,4 @@ def repeatprogramm():
 if __name__ == "__main__":
     print ('Chose your directory to save files:(Click on the path bar of the Windows Explorer and tap Ctrl+C and then Ctrl+V)')
     os.chdir(input())
-    repeatprogramm()
+    repeat_programm()
