@@ -3,6 +3,8 @@ import requests
 import os
 from PIL import Image, ImageFont, ImageDraw 
 def getimage():
+    global camera, nameofcamera, sol1, end, earth_date
+    global roveridentificator, rovername, launch_date, landing_date, status, pathimg
     try:
         while True:
             print('Please enter the date from 0 sol to 1000, or maybe more')
@@ -33,23 +35,23 @@ def getimage():
                     launch_date = rover['launch_date']
                     status = rover['status']
                     end = '\n'
-                    my_image = Image.open(pathimg)
-                    title_text = 'sol: ' + str(sol1)+ end + 'Earth date: ' + str(earth_date)+ end + 'Id of rover: '+ str(roveridentificator) + end + 'Name of rover: '+ str(rovername) + end + 'Lauching date: ' + str(launch_date) + end + 'Landing date: '+ str(landing_date) + end + 'Mission status: '+ str(status) + end + 'Name of camera: ' + str(nameofcamera)
-                    width, height = my_image.size
-                    if width >= 1024 & height >= 1024:
-                        font = ImageFont.load_default()
-                        image_editable = ImageDraw.Draw(my_image)
-                        image_editable.text((20,20), title_text, font=font)
-                        my_image.save(pathimg)
-                    elif width <= 256 & height <= 256:
-                        break
+                    add_text_to_img ()
                 break
             elif r.status_code == 400:
                 print ('Wrong date format')  
     except ValueError:
         print('Please enter: from 0 to curent sol of mission')
     except requests.exceptions.HTTPError as err:
-        print (err)   
+        print (err)
+def add_text_to_img ():
+    my_image = Image.open(pathimg)
+    title_text = 'sol: ' + str(sol1)+ end + 'Earth date: ' + str(earth_date)+ end + 'Id of rover: '+ str(roveridentificator) + end + 'Name of rover: '+ str(rovername) + end + 'Lauching date: ' + str(launch_date) + end + 'Landing date: '+ str(landing_date) + end + 'Mission status: '+ str(status) + end + 'Name of camera: ' + str(nameofcamera)
+    width, height = my_image.size
+    if width >= 1024 & height >= 1024:
+        font = ImageFont.load_default()
+        image_editable = ImageDraw.Draw(my_image)
+        image_editable.text((20,20), title_text, fill = 'yellow', font=font)
+        my_image.save(pathimg)
 def repeatprogramm():
     repeatprogramm = 1
     while repeatprogramm == 1:
