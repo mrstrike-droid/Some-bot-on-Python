@@ -27,7 +27,7 @@ def parsing():
         with open (pathimg, 'wb') as f:
             for chunk in r1:
                 f.write(chunk)
-for p in range(1,2):
+for p in range(1,71):
     url = f'https://www.russianfood.com/recipes/bytype/?fid=216&page={p}'
     r = requests.get(url)
     sleep(6)
