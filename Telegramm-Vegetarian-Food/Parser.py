@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from time import sleep
 import os
-from threading import Thread
+import json
 data = []
 os.makedirs('Картинки')
 def parsing():
@@ -27,13 +27,13 @@ def parsing():
         with open (pathimg, 'wb') as f:
             for chunk in r1:
                 f.write(chunk)
-for p in range(1,61):
+for p in range(1,2):
     url = f'https://www.russianfood.com/recipes/bytype/?fid=216&page={p}'
     r = requests.get(url)
     sleep(6)
     parsing()
     print(p)
-with open ('Recepies.txt', 'w') as f:
-    f.write(str(data))
+with open ('Recepies.json', 'w', encoding='utf-8') as f:
+    json.dump(data, f, ensure_ascii=False, indent=4)
 
 
