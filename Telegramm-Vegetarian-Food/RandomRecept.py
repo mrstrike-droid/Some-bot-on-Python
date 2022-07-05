@@ -1,7 +1,6 @@
 import json
 import os
 import random
-d = {}
 rand = random.randrange(0,50)
 with open('C:\\Users\\Aleksey\\Desktop\\База данных вегеторианских рецептов\\Recepies.json','r', encoding='utf-8' ) as file:
     text = json.load(file)
