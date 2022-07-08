@@ -18,7 +18,7 @@ def get_recipe(message):
         recipi = first_dict[3]
         url = first_dict[4]
         end = '\n'
-        bot.send_message(message.chat.id, title+end+body+end+'Список ингридиентов: '+recipi+end+'Ссылка на рецепт: '+url)
     pathimg = (f'C:\\Users\\Aleksey\\Desktop\\База данных вегеторианских рецептов\\Картинки\\{id_foto}.jpeg')
     bot.send_photo(message.chat.id, photo=open(pathimg, 'rb'))
+    bot.send_message(message.chat.id, title+end+body+end+'Список ингридиентов: '+recipi+end+'Ссылка на рецепт: '+url)
 bot.polling()
