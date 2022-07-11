@@ -22,8 +22,14 @@ def search_recipe():
         text = json.load(file)
         print('Введите ингредиенты: ')
         string2=str(input())
+        print('Searching...')
         for i in text:
-            recipi1 = i[3]
+            id_foto = i[0]
+            title = i[1]
+            body = i[2]
+            url = i[4]
+            end = '\n'
+            recipi1 = i[3]            
             string1 = recipi1
             unwanted_characters = ".,!?"
             string1_words = set(string1.split())
@@ -33,11 +39,8 @@ def search_recipe():
             string2_words = {word.strip(unwanted_characters).lower() for word in string2_words}
             common_words = string1_words & string2_words
             if len(common_words) >= 3:
-                print(recipi1)
-                #print(title+end+body+end+'Список ингридиентов: '+recipi+end+'Ссылка на рецепт: '+url)
+                print(title+end+body+end+'Список ингридиентов: '+recipi1+end+'Ссылка на рецепт: '+url)
                 break
-            else:
-                print('Ищем...')
 search_recipe()
 
 

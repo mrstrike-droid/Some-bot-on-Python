@@ -1,11 +1,13 @@
-string1 = 'капуста белокочанная, крупа манная, лук репчатый, майонез,постный, чеснок, соус томатный, соль, хмели-сунели'
+from thefuzz import fuzz, process
+import json
+with open('C:\\Users\\Aleksey\\Desktop\\База данных вегеторианских рецептов\\Recepies.json','r', encoding='utf-8' ) as file:
+        text = json.load(file)
 string2=str(input())
-unwanted_characters = ".,!?"
-string1_words = set(string1.split())
-string2_words = set(string2.split())
-string1_words = {word.strip(unwanted_characters) for word in string1_words}
-string2_words = {word.strip(unwanted_characters) for word in string2_words}
-string2_words = {word.strip(unwanted_characters).lower() for word in string2_words}
-common_words = string1_words & string2_words
-if len(common_words) == 3:
-    print(common_words)
+for i in text:
+    recipi1 = i[3]            
+    string1 = recipi1
+    if fuzz.token_sort_ratio(string1, string2) >= 40:
+        print(recipi1)
+        break
+
+            
