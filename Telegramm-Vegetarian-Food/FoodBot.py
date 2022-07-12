@@ -29,7 +29,6 @@ def get_specific_recipe(message):
     with open('C:\\Users\\Aleksey\\Desktop\\База данных вегеторианских рецептов\\Recepies.json','r', encoding='utf-8' ) as file:
         text = json.load(file)
         string2=str(message.text)
-        bot.send_message(message.chat.id, 'Searching...')
         for i in text:
             id_foto = i[0]
             title = i[1]
