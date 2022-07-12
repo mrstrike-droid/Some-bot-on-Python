@@ -22,11 +22,13 @@ def get_random_recipe(message):
     bot.send_photo(message.chat.id, photo=open(pathimg, 'rb'))
     bot.send_message(message.chat.id, title+end+body+end+'Список ингридиентов: '+recipi+end+'Ссылка на рецепт: '+url)
 @bot.message_handler(commands=['find'])
-def get_random_recipe(message, update: Update):
+def get_ingridients(message):
+        bot.send_message(message.chat.id, 'Введите ингредиенты: ')
+        bot.register_next_step_handler(message, get_specific_recipe)
+def get_specific_recipe(message):
     with open('C:\\Users\\Aleksey\\Desktop\\База данных вегеторианских рецептов\\Recepies.json','r', encoding='utf-8' ) as file:
         text = json.load(file)
-        bot.send_message(message.chat.id, 'Введите ингредиенты: ')
-        string2=update.message.text
+        string2=str(message.text)
         bot.send_message(message.chat.id, 'Searching...')
         for i in text:
             id_foto = i[0]
