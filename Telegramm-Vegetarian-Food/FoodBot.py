@@ -1,11 +1,22 @@
 from email import message
 import telebot
+from telebot import types
 import json
 import random
 bot = telebot.TeleBot('5542226206:AAETwbHXtcWdQS0VoNLT9wjprqv_feu4Log')
 @bot.message_handler(commands=['start'])
 def start_message(message):
-    bot.send_message(message.chat.id, 'Напишите: /random что бы получить рандомный рецепт или напишите: /find что бы найти рецепт по ключевым словам')
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    btn1 = types.KeyboardButton("Выбрать случайный рецепт")
+    btn2 = types.KeyboardButton("Выбрать рецепт по ингридиентам")
+    markup.add(btn1, btn2)
+    bot.send_message(message.chat.id, text='Выбери как найти твой рецепт.'.format(message.from_user), reply_markup=markup)
+@bot.message_handler(content_types=['text'])
+def choice(message):
+    if message.text == "Выбрать случайный рецепт":
+        get_random_recipe(message)
+    elif message.text == "Выбрать рецепт по ингридиентам":
+        get_ingridients(message)
 @bot.message_handler(commands=['random'])
 def get_random_recipe(message):
     rand = random.randrange(0,3475)
@@ -21,6 +32,7 @@ def get_random_recipe(message):
     pathimg = (f'C:\\Users\\Aleksey\\Desktop\\База данных вегеторианских рецептов\\Картинки\\{id_foto}.jpeg')
     bot.send_photo(message.chat.id, photo=open(pathimg, 'rb'))
     bot.send_message(message.chat.id, title+end+body+end+'Список ингридиентов: '+recipi+end+'Ссылка на рецепт: '+url)
+    start_message(message)
 @bot.message_handler(commands=['find'])
 def get_ingridients(message):
         bot.send_message(message.chat.id, 'Введите ингредиенты: ')
@@ -49,4 +61,6 @@ def get_specific_recipe(message):
                 bot.send_photo(message.chat.id, photo=open(pathimg, 'rb'))
                 bot.send_message(message.chat.id, title+end+body+end+'Список ингридиентов: '+recipi1+end+'Ссылка на рецепт: '+url)
                 break
+    start_message(message)
 bot.polling()
+

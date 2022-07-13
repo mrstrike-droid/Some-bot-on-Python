@@ -41,7 +41,35 @@ def search_recipe():
             if len(common_words) >= 3:
                 print(title+end+body+end+'Список ингридиентов: '+recipi1+end+'Ссылка на рецепт: '+url)
                 break
-search_recipe()
+def search_recipe_by_title():
+    with open('C:\\Users\\Aleksey\\Desktop\\База данных вегеторианских рецептов\\Recepies.json','r', encoding='utf-8' ) as file:
+        text = json.load(file)
+        print('Поиск блюда по названию: ')
+        string2=str(input())
+        print('Какое количество блюд вы хотите увидеть: ')
+        recipe_shown = int(input())
+        recipe_count = 0
+        for i in text:
+            id_foto = i[0]
+            body = i[2]
+            recipi1 = i[3]
+            url = i[4]
+            end = '\n'
+            title = i[1]           
+            string1 = title
+            unwanted_characters = ".,!?"
+            string1_words = set(string1.split())
+            string2_words = set(string2.split())
+            string1_words = {word.strip(unwanted_characters) for word in string1_words}
+            string2_words = {word.strip(unwanted_characters) for word in string2_words}
+            string2_words = {word.strip(unwanted_characters).lower() for word in string2_words}
+            common_words = string1_words & string2_words
+            if len(common_words) >= 1:
+                recipe_count +=1
+                print(title+end+body+end+'Список ингридиентов: '+recipi1+end+'Ссылка на рецепт: '+url)
+                if recipe_shown == recipe_count:
+                    break
+search_recipe_by_title()
 
 
 
