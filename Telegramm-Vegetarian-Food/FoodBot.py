@@ -24,8 +24,10 @@ def choice(message):
         get_text_input_from_user(message)
 @bot.message_handler(commands=['random'])
 def get_random_recipe(message):
+    global path_data
+    path_data = 'C:\\Users\\Aleksey\\Desktop\\База данных вегеторианских рецептов\\Recepies.json'
     rand = random.randrange(0,3475)
-    with open('C:\\Users\\Aleksey\\Desktop\\База данных вегеторианских рецептов\\Recepies.json','r', encoding='utf-8' ) as file:
+    with open(path_data,'r', encoding='utf-8' ) as file:
         text = json.load(file)
         first_dict = text[rand]
         id_foto = first_dict[0]
@@ -43,7 +45,7 @@ def get_ingridients(message):
         bot.send_message(message.chat.id, 'Введите ингредиенты: ')
         bot.register_next_step_handler(message, get_specific_recipe)
 def get_specific_recipe(message):
-    with open('C:\\Users\\Aleksey\\Desktop\\База данных вегеторианских рецептов\\Recepies.json','r', encoding='utf-8' ) as file:
+    with open(path_data,'r', encoding='utf-8' ) as file:
         text = json.load(file)
         string2=str(message.text)
         for i in text:
@@ -77,8 +79,9 @@ def get_number_input_from_user(message):
     answer2 = bot.send_message(message.chat.id, 'Сколько показывать рецептов: ')
     bot.register_next_step_handler(answer2, get_recipe_by_title)
 def get_recipe_by_title(message):
-    with open('C:\\Users\\Aleksey\\Desktop\\База данных вегеторианских рецептов\\Recepies.json','r', encoding='utf-8' ) as file:
+    with open(path_data,'r', encoding='utf-8' ) as file:
         text = json.load(file)
+        random.shuffle(text)
         recipe_shown = int(message.text)
         recipe_count = 0
         for i in text:
