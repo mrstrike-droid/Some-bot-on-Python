@@ -8,7 +8,7 @@ bot = telebot.TeleBot('5558566177:AAHpNimakvw3qU-ur3hAuZFw6XHuAEy-nD8')
 def start_message(message):
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
     btn1 = types.KeyboardButton("Посмотреть картинку за сегодня")
-    btn2 = types.KeyboardButton("Посмотреть картинку за определенный день день")
+    btn2 = types.KeyboardButton("Посмотреть картинку за определенный день")
     btn3 = types.KeyboardButton("Посмотреть картинку за определенные дни")
     keyboard.add(btn1)
     keyboard.add(btn2)
@@ -16,9 +16,9 @@ def start_message(message):
     bot.send_message(message.chat.id, text='Выбери что сегодня смотрим.'.format(message.from_user), reply_markup=keyboard)
 @bot.message_handler(content_types=['text'])
 def choice(message):
-    if message.text == "Посмотреть картинку за определенный день день":
+    if message.text == "Посмотреть картинку за определенный день":
         input_day(message)
-    elif message.text == "Посмотреть картинку за определенные дни":
+    elif message.text == "Посмотреть картинки за определенные дни":
         input_date_from(message)
     elif message.text == "Посмотреть картинку за сегодня":
         today_day(message)
