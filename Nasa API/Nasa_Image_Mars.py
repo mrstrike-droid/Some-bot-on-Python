@@ -52,6 +52,8 @@ def add_text_to_img ():
         image_editable = ImageDraw.Draw(my_image)
         image_editable.text((20,20), title_text, fill = 'yellow', font=font)
         my_image.save(pathimg)
+    elif width <= 1024 & height <= 1024:
+        os.remove(pathimg)
 def repeatprogramm():
     repeatprogramm = 1
     while repeatprogramm == 1:
