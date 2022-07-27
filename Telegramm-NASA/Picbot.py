@@ -3,7 +3,8 @@ from telebot import types
 import requests
 from datetime import date
 import json
-bot = telebot.TeleBot('5558566177:AAHpNimakvw3qU-ur3hAuZFw6XHuAEy-nD8')
+from config import botoken
+bot = telebot.TeleBot(botoken)
 @bot.message_handler(commands=['start'])
 def start_message(message):
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
