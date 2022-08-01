@@ -9,8 +9,9 @@ creds = ServiceAccountCredentials.from_json_keyfile_name('C:\\Users\\Aleksey\\De
 client = gspread.authorize(creds)
 sheet = client.open("Бюджет")
 list_of_hashes = sheet.get_worksheet(1)
-for character in range_char("c", "z"):
-    column_index = character.upper
-list_of_hashes.update(f'{column_index}1', '01.08.2022')
+for character in range_char("c", "y"):
+    column_index = character
+    print(column_index)
+    list_of_hashes.update(f'{column_index}1', '01.08.2022')
 input()
 
