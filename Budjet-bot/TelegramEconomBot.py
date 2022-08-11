@@ -1,3 +1,4 @@
+from msilib import text
 import telebot
 from telebot import types
 import gspread
@@ -14,11 +15,11 @@ sheet = client.open("Бюджет")
 list_of_hashes = sheet.get_worksheet(1)
 @bot.message_handler(commands=['start'])
 def start_message(message):
-    keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
     btn1 = types.KeyboardButton("Начать вносить покупки")
     keyboard.add(btn1)
 @bot.message_handler(content_types=['text'])
-def choose_variant(message):
+def text_variant(message):
     if message.text == "Начать вносить покупки":
         choose_variant(message)
 def choose_variant(message):
@@ -45,6 +46,7 @@ def update_info_again(message):
     for i in range(3,24):
         cell_info = list_of_hashes.cell(1, f'{i}').value
         if cell_info == day_today:
+            bot.send_message(message.chat.id, 'hello')
             list_message(message)
             what_update()
             update_another()
