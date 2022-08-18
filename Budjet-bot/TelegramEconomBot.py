@@ -18,6 +18,7 @@ def start_message(message):
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
     btn1 = types.KeyboardButton("Начать вносить покупки")
     keyboard.add(btn1)
+    bot.send_message(message.chat.id, text='Выбери что сегодня смотрим.'.format(message.from_user), reply_markup=keyboard)
 @bot.message_handler(content_types=['text'])
 def text_variant(message):
     if message.text == "Начать вносить покупки":
@@ -38,84 +39,76 @@ def update_info_in_next_day(message):
         if cell_info == None:
             list_of_hashes.update_cell( 1, f'{i}', f'{day_today}')
             list_message(message)
-            what_update()
-            update_another()
             break
 def update_info_again(message):
     global i
     for i in range(3,24):
         cell_info = list_of_hashes.cell(1, f'{i}').value
         if cell_info == day_today:
-            bot.send_message(message.chat.id, 'hello')
             list_message(message)
-            what_update()
-            update_another()
             break
 @bot.message_handler(commands=['List'])
 def list_message(message):
-    keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    #line_btn1 = ['Продукты', 'За квартиру']
-    #btn1 = types.KeyboardButton("Продукты")
-    #btn2 = types.KeyboardButton("За квартиру")
-    btn3 = types.KeyboardButton("На кафе")
-    #btn4 = types.KeyboardButton("Пицца на выходных")
-    #btn5 = types.KeyboardButton("Прочие расходы")
-    #btn6 = types.KeyboardButton("Личные деньги")
-    #btn7 = types.KeyboardButton("Отложить")
-    #btn8 = types.KeyboardButton("Сколько денег осталось")
-    #keyboard.add(*line_btn1)
-    keyboard.add(btn3)
-    #keyboard.add(btn5, btn6)
-    #keyboard.add(btn7, btn8)
-def what_update():
-    variant = int(input())
-    if variant == 1:
+    keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
+    line_btn1 = ['Продукты', 'За квартиру']
+    line_btn2 = ['На кафе', 'Пицца']
+    line_btn3 = ['Прочие расходы', 'Личные расходы']
+    line_btn4 = ['Отложить', 'Сколько осталось']
+    keyboard.add(*line_btn1)
+    keyboard.add(*line_btn2)
+    keyboard.add(*line_btn3)
+    keyboard.add(*line_btn4)
+    bot.send_message(message.chat.id, text='Выбери что сегодня смотрим.'.format(message.from_user), reply_markup=keyboard)
+@bot.message_handler(content_types=['text'])
+def what_update(message):
+    if message.text == 'Продукты':
         cell_amount = list_of_hashes.cell(2, f'{i}').value
         if cell_amount == None:
             product_info()
         elif cell_amount != 0:
             product_info_add_next()
-    elif variant == 2:
+    elif message.text == 'За квартиру':
         cell_amount = list_of_hashes.cell(3, f'{i}').value
         if cell_amount == None:
             flat_info()
         elif cell_amount != 0:
             flat_info_add_next()
-    elif variant == 3:
+    elif message.text == 'На кафе':
         cell_amount = list_of_hashes.cell(4, f'{i}').value
         if cell_amount == None:
             cafe_info()
         elif cell_amount != 0:
             cafe_info_add_next()
-    elif variant == 4:
+    elif message.text == 'Пицца':
         cell_amount = list_of_hashes.cell(5, f'{i}').value
         if cell_amount == None:
             pizza_info()
         elif cell_amount != 0:
             pizza_info_add_next()
-    elif variant == 5:
+    elif message.text == 'Прочие расходы':
         cell_amount = list_of_hashes.cell(6, f'{i}').value
         if cell_amount == None:
             another_info()
         elif cell_amount != 0:
             another_info_add_next()
-    elif variant == 6:
+    elif message.text == 'Личные расходы':
         cell_amount = list_of_hashes.cell(7, f'{i}').value
         if cell_amount == None:
             self_pay_info()
         elif cell_amount != 0:
             self_pay_info_add_next()
-    elif variant == 7:
+    elif message.text == 'Отложить':
         cell_amount = list_of_hashes.cell(8, f'{i}').value
         if cell_amount == None:
             saving_info()
         elif cell_amount != 0:
             saving_info_add_next()
-    elif variant == 8:
-        how_much_ramains()
-def how_much_ramains():
+    elif message.text == 'Сколько осталось':
+        how_much_ramains(message)
+def how_much_ramains(message):
     cell_amount = list_of_hashes.cell(15, f'{i}').value
-    print(cell_amount)
+    bot.send_message(message.chat.id, 'cell_amount')
+    bot.send_message(message.chat.id, cell_amount)
 def product_info():
     print('Что мы потратили сегодня на продукты:')
     amount = int(input())
@@ -130,4 +123,88 @@ def product_info_add_next():
     list_of_hashes.update_cell(2, f'{i}', f'{amount_all}')
     cell_info = list_of_hashes.cell(2, 2).value
     print('На продукты осталось: ', cell_info)
+def flat_info():
+    print('Что мы потратили сегодня на квартиру:')
+    amount = int(input())
+    list_of_hashes.update_cell(3, f'{i}', f'{amount}')
+    cell_info = list_of_hashes.cell(3, 2).value
+    print('На квартиру осталось: ', cell_info)
+def flat_info_add_next():
+    cell_amount = int(list_of_hashes.cell(3, f'{i}').value)
+    print('Сколько еще потратили на квартиру:')
+    amount_new = int(input())
+    amount_all = amount_new + cell_amount
+    list_of_hashes.update_cell( 3, f'{i}', f'{amount_all}')
+    cell_info = list_of_hashes.cell(3, 2).value
+    print('На квартиру осталось: ', cell_info)
+def cafe_info():
+    print('Что мы потратили сегодня на кафе:')
+    amount = int(input())
+    list_of_hashes.update_cell( 4, f'{i}', f'{amount}')
+    cell_info = list_of_hashes.cell(4, 2).value
+    print('На кафе осталось: ', cell_info)
+def cafe_info_add_next():
+    cell_amount = int(list_of_hashes.cell(4, f'{i}').value)
+    print('Сколько еще потратили на кафе:')
+    amount_new = int(input())
+    amount_all = amount_new + cell_amount
+    list_of_hashes.update_cell(4, f'{i}', f'{amount_all}')
+    cell_info = list_of_hashes.cell(4, 2).value
+    print('На кафе осталось: ', cell_info)
+def pizza_info():
+    print('Что мы потратили сегодня на пиццу:')
+    amount = int(input())
+    list_of_hashes.update_cell( 5, f'{i}', f'{amount}')
+    cell_info = list_of_hashes.cell(5, 2).value
+    print('На пиццу осталось: ', cell_info)
+def pizza_info_add_next():
+    cell_amount = int(list_of_hashes.cell(5, f'{i}').value)
+    print('Сколько еще потратили на пиццу:')
+    amount_new = int(input())
+    amount_all = amount_new + cell_amount
+    list_of_hashes.update_cell(5, f'{i}', f'{amount_all}')
+    cell_info = list_of_hashes.cell(5, 2).value
+    print('На пиццу осталось: ', cell_info)
+def another_info():
+    print('Что мы потратили сегодня на прочие расходы:')
+    amount = int(input())
+    list_of_hashes.update_cell( 6, f'{i}', f'{amount}')
+    cell_info = list_of_hashes.cell(6, 2).value
+    print('На прочие расходы осталось: ', cell_info)
+def another_info_add_next():
+    cell_amount = int(list_of_hashes.cell(6, f'{i}').value)
+    print('Сколько еще потратили на прочие расходы:')
+    amount_new = int(input())
+    amount_all = amount_new + cell_amount
+    list_of_hashes.update_cell(6, f'{i}', f'{amount_all}')
+    cell_info = list_of_hashes.cell(6, 2).value
+    print('На прочие расходы осталось: ', cell_info)
+def self_pay_info():
+    print('Что мы потратили сегодня на личные нужды:')
+    amount = int(input())
+    list_of_hashes.update_cell( 7, f'{i}', f'{amount}')
+    cell_info = list_of_hashes.cell(7, 2).value
+    print('На личные нужды осталось: ', cell_info)
+def self_pay_info_add_next():
+    cell_amount = int(list_of_hashes.cell(7, f'{i}').value)
+    print('Сколько еще потратили на личные нужды:')
+    amount_new = int(input())
+    amount_all = amount_new + cell_amount
+    list_of_hashes.update_cell(7, f'{i}', f'{amount_all}')
+    cell_info = list_of_hashes.cell(7, 2).value
+    print('На личные нужды осталось: ', cell_info)
+def saving_info():
+    print('Что мы отложили сегодня:')
+    amount = int(input())
+    list_of_hashes.update_cell( 8, f'{i}', f'{amount}')
+    cell_info = list_of_hashes.cell(8, f'{i}').value
+    print('На данный момет мы отложили: ', cell_info)
+def saving_info_add_next():
+    cell_amount = int(list_of_hashes.cell(8, f'{i}').value)
+    print('Сколько еще потложили сегодня:')
+    amount_new = int(input())
+    amount_all = amount_new + cell_amount
+    list_of_hashes.update_cell(8, f'{i}', f'{amount_all}')
+    cell_info = list_of_hashes.cell(8, f'{i}').value
+    print('На данный момет мы отложили: ', cell_info)
 bot.polling()
