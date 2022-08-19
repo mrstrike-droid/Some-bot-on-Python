@@ -19,7 +19,7 @@ def start_message(message):
 def choice(message):
     if message.text == "Посмотреть картинку за определенный день":
         input_day(message)
-    elif message.text == "Посмотреть картинки за определенные дни":
+    elif message.text == "Посмотреть картинку за определенные дни":
         input_date_from(message)
     elif message.text == "Посмотреть картинку за сегодня":
         today_day(message)
@@ -42,10 +42,10 @@ def one_day(message):
                 bot.send_message(message.chat.id, text)
                 break 
             elif r.status_code == 400:
-                bot.send_message(message.chat.id, wrong_date)
+                bot.send_message(message.chat.id, 'wrong_date')
                 break  
     except ValueError:
-        bot.send_message(message.chat.id, wrong_date)
+        bot.send_message(message.chat.id, 'wrong_date')
     except requests.exceptions.HTTPError as err:
         bot.send_message(message.chat.id, err)
     start_message(message)
@@ -74,10 +74,10 @@ def date_from_to(message):
                     bot.send_message(message.chat.id, text1)
                 break
             elif r.status_code == 400:
-               bot.send_message(message.chat.id, wrong_date)
+               bot.send_message(message.chat.id, 'wrong_date')
                break
     except ValueError:
-        bot.send_message(message.chat.id, wrong_date)
+        bot.send_message(message.chat.id, 'wrong_date')
         input_date_from(message)
     except requests.exceptions.HTTPError as err:
         bot.send_message(message.chat.id, err)
