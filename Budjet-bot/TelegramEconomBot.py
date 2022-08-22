@@ -1,3 +1,4 @@
+from email import message
 from msilib import text
 import telebot
 from telebot import types
@@ -59,14 +60,15 @@ def list_message(message):
     keyboard.add(*line_btn3)
     keyboard.add(*line_btn4)
     bot.send_message(message.chat.id, text='Выбери что сегодня смотрим.'.format(message.from_user), reply_markup=keyboard)
+    bot.register_next_step_handler(message, what_update)
 @bot.message_handler(content_types=['text'])
 def what_update(message):
     if message.text == 'Продукты':
         cell_amount = list_of_hashes.cell(2, f'{i}').value
         if cell_amount == None:
-            product_info()
+            product_info(message)
         elif cell_amount != 0:
-            product_info_add_next()
+            product_info_add_next(message)
     elif message.text == 'За квартиру':
         cell_amount = list_of_hashes.cell(3, f'{i}').value
         if cell_amount == None:
@@ -107,22 +109,28 @@ def what_update(message):
         how_much_ramains(message)
 def how_much_ramains(message):
     cell_amount = list_of_hashes.cell(15, f'{i}').value
-    bot.send_message(message.chat.id, 'cell_amount')
     bot.send_message(message.chat.id, cell_amount)
-def product_info():
-    print('Что мы потратили сегодня на продукты:')
-    amount = int(input())
+    list_message(message)
+def product_info(message):
+    bot.send_message(message.chat.id, 'Что мы потратили сегодня на продукты:')
+    bot.register_next_step_handler(message, add_info_cell_1)
+def add_info_cell_1(message):
+    amount = int(message.text)
     list_of_hashes.update_cell( 2, f'{i}', f'{amount}')
     cell_info = list_of_hashes.cell(2, 2).value
-    print('На продукты осталось: ', cell_info)
-def product_info_add_next():
+    bot.send_message(message.chat.id, 'На продукты осталось: ' + cell_info)
+    list_message(message)
+def product_info_add_next(message):
+    bot.send_message(message.chat.id, 'Сколько еще потратили на продукты:')
+    bot.register_next_step_handler(message, add_plus_info_cell_1)
+def add_plus_info_cell_1(message):
+    amount_new = int(message.text)
     cell_amount = int(list_of_hashes.cell(2, f'{i}').value)
-    print('Сколько еще потратили на продукты:')
-    amount_new = int(input())
     amount_all = amount_new + cell_amount
     list_of_hashes.update_cell(2, f'{i}', f'{amount_all}')
     cell_info = list_of_hashes.cell(2, 2).value
-    print('На продукты осталось: ', cell_info)
+    bot.send_message(message.chat.id, 'На продукты осталось: ' + cell_info)
+    list_message(message)
 def flat_info():
     print('Что мы потратили сегодня на квартиру:')
     amount = int(input())
