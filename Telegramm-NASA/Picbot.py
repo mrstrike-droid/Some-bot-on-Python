@@ -38,6 +38,11 @@ def one_day(message):
             if r.status_code == 200:
                 url = parsed['url']
                 text = parsed['explanation'] 
+                media_type = parsed['media_type']
+                if media_type == 'video':
+                    bot.send_message(message.chat.id, text)
+                    bot.send_message(message.chat.id, url)
+                    break
                 bot.send_photo(message.chat.id, url)
                 bot.send_message(message.chat.id, text)
                 break 
@@ -69,6 +74,11 @@ def date_from_to(message):
                     url1 = x['url']
                     text1 = x['explanation']
                     date1 = x['date']
+                    media_type = x['media_type']
+                    if media_type == 'video':
+                        bot.send_message(message.chat.id, text1)
+                        bot.send_message(message.chat.id, url1)
+                        break
                     bot.send_message(message.chat.id, 'Дата сьемки: '+date1)
                     bot.send_photo(message.chat.id, url1)
                     bot.send_message(message.chat.id, text1)
@@ -92,6 +102,11 @@ def today_day(message):
             if r.status_code == 200:
                 url = parsed['url']
                 text = parsed['explanation'] 
+                media_type = parsed['media_type']
+                if media_type == 'video':
+                    bot.send_message(message.chat.id, text)
+                    bot.send_message(message.chat.id, url)
+                    break
                 bot.send_photo(message.chat.id, url)
                 bot.send_message(message.chat.id, text)
                 break 
