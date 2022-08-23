@@ -72,39 +72,39 @@ def what_update(message):
     elif message.text == 'За квартиру':
         cell_amount = list_of_hashes.cell(3, f'{i}').value
         if cell_amount == None:
-            flat_info()
+            flat_info(message)
         elif cell_amount != 0:
-            flat_info_add_next()
+            flat_info_add_next(message)
     elif message.text == 'На кафе':
         cell_amount = list_of_hashes.cell(4, f'{i}').value
         if cell_amount == None:
-            cafe_info()
+            cafe_info(message)
         elif cell_amount != 0:
-            cafe_info_add_next()
+            cafe_info_add_next(message)
     elif message.text == 'Пицца':
         cell_amount = list_of_hashes.cell(5, f'{i}').value
         if cell_amount == None:
-            pizza_info()
+            pizza_info(message)
         elif cell_amount != 0:
-            pizza_info_add_next()
+            pizza_info_add_next(message)
     elif message.text == 'Прочие расходы':
         cell_amount = list_of_hashes.cell(6, f'{i}').value
         if cell_amount == None:
-            another_info()
+            another_info(message)
         elif cell_amount != 0:
-            another_info_add_next()
+            another_info_add_next(message)
     elif message.text == 'Личные расходы':
         cell_amount = list_of_hashes.cell(7, f'{i}').value
         if cell_amount == None:
-            self_pay_info()
+            self_pay_info(message)
         elif cell_amount != 0:
-            self_pay_info_add_next()
+            self_pay_info_add_next(message)
     elif message.text == 'Отложить':
         cell_amount = list_of_hashes.cell(8, f'{i}').value
         if cell_amount == None:
-            saving_info()
+            saving_info(message)
         elif cell_amount != 0:
-            saving_info_add_next()
+            saving_info_add_next(message)
     elif message.text == 'Сколько осталось':
         how_much_ramains(message)
 def how_much_ramains(message):
@@ -131,88 +131,124 @@ def add_plus_info_cell_1(message):
     cell_info = list_of_hashes.cell(2, 2).value
     bot.send_message(message.chat.id, 'На продукты осталось: ' + cell_info)
     list_message(message)
-def flat_info():
-    print('Что мы потратили сегодня на квартиру:')
-    amount = int(input())
+def flat_info(message):
+    bot.send_message(message.chat.id, 'Что мы потратили сегодня на квартиру:')
+    bot.register_next_step_handler(message, add_info_cell_2)
+def add_info_cell_2(message):
+    amount = int(message.text)
     list_of_hashes.update_cell(3, f'{i}', f'{amount}')
     cell_info = list_of_hashes.cell(3, 2).value
-    print('На квартиру осталось: ', cell_info)
-def flat_info_add_next():
+    bot.send_message(message.chat.id, 'На квартиру осталось: '+ cell_info)
+    list_message(message)
+def flat_info_add_next(message):
+    bot.send_message(message.chat.id, 'Сколько еще потратили на квартиру:')
+    bot.register_next_step_handler(message, add_plus_info_cell_2)
+def add_plus_info_cell_2(message):
+    amount_new = int(message.text)
     cell_amount = int(list_of_hashes.cell(3, f'{i}').value)
-    print('Сколько еще потратили на квартиру:')
-    amount_new = int(input())
     amount_all = amount_new + cell_amount
     list_of_hashes.update_cell( 3, f'{i}', f'{amount_all}')
     cell_info = list_of_hashes.cell(3, 2).value
-    print('На квартиру осталось: ', cell_info)
-def cafe_info():
-    print('Что мы потратили сегодня на кафе:')
-    amount = int(input())
+    bot.send_message(message.chat.id, 'На квартиру осталось: ' + cell_info)
+    list_message(message)
+def cafe_info(message):
+    bot.send_message(message.chat.id, 'Что мы потратили сегодня на кафе:')
+    bot.register_next_step_handler(message, add_info_cell_3)
+def add_info_cell_3(message):
+    amount = int(message.text)
     list_of_hashes.update_cell( 4, f'{i}', f'{amount}')
     cell_info = list_of_hashes.cell(4, 2).value
-    print('На кафе осталось: ', cell_info)
-def cafe_info_add_next():
+    bot.send_message(message.chat.id, 'На кафе осталось: '+  cell_info)
+    list_message(message)
+def cafe_info_add_next(message):
+    bot.send_message(message.chat.id, 'Сколько еще потратили на кафе:')
+    bot.register_next_step_handler(message, add_plus_info_cell_3)
+def add_plus_info_cell_3(message):
+    amount_new = int(message.text)
     cell_amount = int(list_of_hashes.cell(4, f'{i}').value)
-    print('Сколько еще потратили на кафе:')
-    amount_new = int(input())
     amount_all = amount_new + cell_amount
     list_of_hashes.update_cell(4, f'{i}', f'{amount_all}')
     cell_info = list_of_hashes.cell(4, 2).value
-    print('На кафе осталось: ', cell_info)
-def pizza_info():
-    print('Что мы потратили сегодня на пиццу:')
-    amount = int(input())
+    bot.send_message(message.chat.id, 'На кафе осталось: ' + cell_info)
+    list_message(message)
+def pizza_info(message):
+    bot.send_message(message.chat.id, 'Что мы потратили сегодня на пиццу:')
+    bot.register_next_step_handler(message, add_info_cell_4)
+def add_info_cell_4(message):
+    amount = int(message.text)
     list_of_hashes.update_cell( 5, f'{i}', f'{amount}')
     cell_info = list_of_hashes.cell(5, 2).value
-    print('На пиццу осталось: ', cell_info)
-def pizza_info_add_next():
+    bot.send_message(message.chat.id, 'На пиццу осталось: ' +  cell_info)
+    list_message(message)
+def pizza_info_add_next(message):
+    bot.send_message(message.chat.id, 'Сколько еще потратили на пиццу:')
+    bot.register_next_step_handler(message, add_plus_info_cell_4)
+def add_plus_info_cell_4(message):
+    amount_new = int(message.text)
     cell_amount = int(list_of_hashes.cell(5, f'{i}').value)
-    print('Сколько еще потратили на пиццу:')
-    amount_new = int(input())
     amount_all = amount_new + cell_amount
     list_of_hashes.update_cell(5, f'{i}', f'{amount_all}')
     cell_info = list_of_hashes.cell(5, 2).value
-    print('На пиццу осталось: ', cell_info)
-def another_info():
-    print('Что мы потратили сегодня на прочие расходы:')
-    amount = int(input())
+    bot.send_message(message.chat.id, 'На пиццу осталось: ' + cell_info)
+    list_message(message)
+def another_info(message):
+    bot.send_message(message.chat.id, 'Что мы потратили сегодня на прочие расходы:')
+    bot.register_next_step_handler(message, add_info_cell_5)
+def add_info_cell_5(message):
+    amount = int(message.text)
     list_of_hashes.update_cell( 6, f'{i}', f'{amount}')
     cell_info = list_of_hashes.cell(6, 2).value
-    print('На прочие расходы осталось: ', cell_info)
-def another_info_add_next():
+    bot.send_message(message.chat.id, 'На прочие расходы осталось: ' + cell_info)
+    list_message(message)
+def another_info_add_next(message):
+    bot.send_message(message.chat.id, 'Сколько еще потратили на прочие расходы:')
+    bot.register_next_step_handler(message, add_plus_info_cell_5)
+def add_plus_info_cell_5(message):
+    amount_new = int(message.text)
     cell_amount = int(list_of_hashes.cell(6, f'{i}').value)
-    print('Сколько еще потратили на прочие расходы:')
-    amount_new = int(input())
     amount_all = amount_new + cell_amount
     list_of_hashes.update_cell(6, f'{i}', f'{amount_all}')
     cell_info = list_of_hashes.cell(6, 2).value
-    print('На прочие расходы осталось: ', cell_info)
-def self_pay_info():
-    print('Что мы потратили сегодня на личные нужды:')
-    amount = int(input())
+    bot.send_message(message.chat.id, 'На прочие расходы осталось: ' + cell_info)
+    list_message(message)
+def self_pay_info(message):
+    bot.send_message(message.chat.id, 'Что мы потратили сегодня на личные нужды:')
+    bot.register_next_step_handler(message, add_info_cell_6)
+def add_info_cell_6(message):
+    amount = int(message.text)
     list_of_hashes.update_cell( 7, f'{i}', f'{amount}')
     cell_info = list_of_hashes.cell(7, 2).value
-    print('На личные нужды осталось: ', cell_info)
-def self_pay_info_add_next():
+    bot.send_message(message.chat.id, 'На личные нужды осталось: ' + cell_info)
+    list_message(message)
+def self_pay_info_add_next(message):
+    bot.send_message(message.chat.id, 'Сколько еще потратили на личные нужды:')
+    bot.register_next_step_handler(message, add_plus_info_cell_6)
+def add_plus_info_cell_6(message):
+    amount_new = int(message.text)
     cell_amount = int(list_of_hashes.cell(7, f'{i}').value)
-    print('Сколько еще потратили на личные нужды:')
-    amount_new = int(input())
     amount_all = amount_new + cell_amount
     list_of_hashes.update_cell(7, f'{i}', f'{amount_all}')
     cell_info = list_of_hashes.cell(7, 2).value
-    print('На личные нужды осталось: ', cell_info)
-def saving_info():
-    print('Что мы отложили сегодня:')
-    amount = int(input())
+    bot.send_message(message.chat.id, 'На личные нужды осталось: ' + cell_info)
+    list_message(message)
+def saving_info(message):
+    bot.send_message(message.chat.id, 'Что мы отложили сегодня:')
+    bot.register_next_step_handler(message, add_info_cell_7)
+def add_info_cell_7(message):
+    amount = int(message.text)
     list_of_hashes.update_cell( 8, f'{i}', f'{amount}')
     cell_info = list_of_hashes.cell(8, f'{i}').value
-    print('На данный момет мы отложили: ', cell_info)
-def saving_info_add_next():
+    bot.send_message(message.chat.id, 'На данный момет мы отложили: ' + cell_info)
+    list_message(message)
+def saving_info_add_next(message):
+    bot.send_message(message.chat.id, 'Сколько еще потложили сегодня:')
+    bot.register_next_step_handler(message, add_plus_info_cell_7)
+def add_plus_info_cell_7(message):
+    amount_new = int(message.text)
     cell_amount = int(list_of_hashes.cell(8, f'{i}').value)
-    print('Сколько еще потложили сегодня:')
-    amount_new = int(input())
     amount_all = amount_new + cell_amount
     list_of_hashes.update_cell(8, f'{i}', f'{amount_all}')
     cell_info = list_of_hashes.cell(8, f'{i}').value
-    print('На данный момет мы отложили: ', cell_info)
+    bot.send_message(message.chat.id, 'На данный момет мы отложили: ' + cell_info)
+    list_message(message)
 bot.polling()
