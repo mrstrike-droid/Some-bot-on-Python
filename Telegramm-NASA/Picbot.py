@@ -114,4 +114,6 @@ def today_day(message):
         bot.send_message(message.chat.id, err)
         start_message(message)
     start_message(message)
+#def one_time_message(message):
+
 bot.polling()
