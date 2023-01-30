@@ -2,7 +2,7 @@ import datetime
 
 
 def change_date():
-    x = datetime.datetime.now()
+    global x
     while True:
         if x.month == 12 and x.day == 31:
             x = x.replace(year=x.year+1, month=1,day=1)
@@ -17,15 +17,17 @@ def change_date():
                 x = x.replace(month=x.month+1,day=1)
         if x.day == 1:
             print(x)
+            break
         x = x.replace(day = x.day + 1) 
         print(x)
-y = datetime.datetime(year = 2023, month=1, day=27, hour=17, minute=10).strftime("%Y-%m-%d %H:%M")
-while True:
-    z = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
-    print(y)
-    print(z)
-    if y == z:
-        print('hello')
         break
-
-#change_date()
+def compare_time():
+    x = datetime.datetime(year = 2023, month=1, day=30, hour=21, minute=26).strftime("%Y-%m-%d %H:%M")
+    while True:
+        z = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+        print(x)
+        print(z)
+        if x == z:
+            print('hello')
+            change_date()
+compare_time()
