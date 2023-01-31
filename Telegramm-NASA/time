@@ -1,33 +1,22 @@
+from datetime import datetime
+from datetime import timedelta
 import datetime
 
-
-def change_date():
-    global x
-    while True:
-        if x.month == 12 and x.day == 31:
-            x = x.replace(year=x.year+1, month=1,day=1)
-        elif x.month == 1 or x.month==3 or x.month==5 or x.month==7 or x.month==8 or x.month==10 or x.month==12:
-            if x.day == 31: 
-                x = x.replace(month=x.month+1,day=1)
-        elif x.month==2:
-            if x.day == 28: 
-                x = x.replace(month=x.month+1,day=1)
-        elif x.month==4 or x.month==6 or x.month==9 or x.month==11:
-            if x.day == 30: 
-                x = x.replace(month=x.month+1,day=1)
-        if x.day == 1:
-            print(x)
-            break
-        x = x.replace(day = x.day + 1) 
-        print(x)
-        break
-def compare_time():
-    x = datetime.datetime(year = 2023, month=1, day=30, hour=21, minute=26).strftime("%Y-%m-%d %H:%M")
-    while True:
-        z = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+def change_date(): 
+    global z
+    z = datetime.datetime(year=2023,month=1,day=31,hour=20,minute=28)
+    z = z+timedelta(days = 1)
+    print(z)
+def compare_time(): 
+    z = datetime.datetime(year=2023,month=1,day=31,hour=20,minute=50).strftime("%Y-%m-%d %H:%M")
+    while True:        
+        x = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
         print(x)
         print(z)
         if x == z:
-            print('hello')
-            change_date()
+            z = datetime.datetime.strptime(z, '%Y-%m-%d %H:%M')
+            z = z+timedelta(days = 1)
+            z= datetime.datetime.strftime(z, "%Y-%m-%d %H:%M")
+            print(z)
 compare_time()
+#change_date()
