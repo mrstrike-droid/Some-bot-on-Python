@@ -47,7 +47,7 @@ def search_serial_by_name():
                 print(f'{k}: В этот день сериал не выходил')
             if serial in v[0]:
                 b=v[0].index(serial)
-                print(f'{k}: {dict_with_set_of_date_and_serials[k][0][b]}\n Ссылка: {dict_with_set_of_date_and_serials[k][1][b]}')
+                print(f'{k}: {dict_with_set_of_date_and_serials[k][0][b]}\n Ссылка: https://rezka.ag/{dict_with_set_of_date_and_serials[k][1][b]}')
         choice = str(input('Если хотите еще поискать сериалы напишите да, если не хотите, то напишите нет: '))
         if choice.lower() == 'нет':
             break
