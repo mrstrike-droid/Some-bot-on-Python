@@ -1,7 +1,6 @@
 import requests
 from time import sleep
 from bs4 import BeautifulSoup
-from time import sleep
 dict_with_set_of_date_and_serials = {}
 def parcer():
     list_of_serial_names=[]
