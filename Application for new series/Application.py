@@ -34,13 +34,13 @@ class MainWindow(QWidget):
         layout.addWidget(self.outputField)
     
     def search_serial_by_name(self):     
-        serial = str(self.inputField.text())         
+        serial = str(self.inputField.text())     
         for k,v in dict_with_set_of_date_and_serials.items():
             if serial not in v[0]:
-                self.outputField.setText(f'{k}: В этот день сериал не выходил')
+                self.outputField.append(f'{k}: В этот день сериал не выходил')
             elif serial in v[0]:
                 b=v[0].index(serial)
-                self.outputField.setText(f'{k}: {dict_with_set_of_date_and_serials[k][0][b]}\nСсылка: https://rezka.ag/{dict_with_set_of_date_and_serials[k][1][b]}')
+                self.outputField.append(f'{k}: Вышла новая серия\nСсылка: https://rezka.ag/{dict_with_set_of_date_and_serials[k][1][b]}')
 def parcer():
         list_of_serial_names=[]
         tech_var_list=[]
