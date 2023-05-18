@@ -39,6 +39,7 @@ class MainWindow(QWidget):
         self.outputField.clear()        
         serial = str(self.inputField.text())
         serial = serial.rstrip()  
+        serial = serial.lower() 
         for k,v in dict_with_set_of_date_and_serials.items():
             if serial not in v[0]:
                 self.outputField.append(f'{k}: В этот день сериал не выходил')
@@ -57,7 +58,7 @@ def parcer():
         text_and_urls = soup.find('div', class_='b-content__inline_sidebar').find_all('div', class_='b-seriesupdate__block')
         for i in text_and_urls:
             tech_var= i.find_all('li', class_='b-seriesupdate__block_list_item') 
-            list_of_serial_names=([x.find('div', class_='b-seriesupdate__block_list_item_inner').find('div', class_='cell cell-1').find('a', class_='b-seriesupdate__block_list_link').text for x in tech_var])
+            list_of_serial_names=([x.find('div', class_='b-seriesupdate__block_list_item_inner').find('div', class_='cell cell-1').find('a', class_='b-seriesupdate__block_list_link').text.lower() for x in tech_var])
             list_of_serial_urls=([x.find('div', class_='b-seriesupdate__block_list_item_inner').find('div', class_='cell cell-1').find('a', class_='b-seriesupdate__block_list_link').get('href') for x in tech_var])
             list_of_lists.append([list_of_serial_names, list_of_serial_urls])
         date_var = soup.find('div', class_='b-content__inline_sidebar').find_all('div', class_='b-seriesupdate__block')
