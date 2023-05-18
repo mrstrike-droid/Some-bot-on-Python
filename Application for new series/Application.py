@@ -26,15 +26,19 @@ class MainWindow(QWidget):
         self.setLayout(layout)
 
         self.inputField = QLineEdit()
+        self.inputField.setPlaceholderText('Введите сериал:')
         self.button = QPushButton('Поиск', clicked=self.search_serial_by_name)
         self.outputField = QTextEdit()
+
 
         layout.addWidget(self.inputField)
         layout.addWidget(self.button)
         layout.addWidget(self.outputField)
     
-    def search_serial_by_name(self):     
-        serial = str(self.inputField.text())     
+    def search_serial_by_name(self):
+        self.outputField.clear()        
+        serial = str(self.inputField.text())
+        serial = serial.rstrip()  
         for k,v in dict_with_set_of_date_and_serials.items():
             if serial not in v[0]:
                 self.outputField.append(f'{k}: В этот день сериал не выходил')
