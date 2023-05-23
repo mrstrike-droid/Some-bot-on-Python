@@ -1,7 +1,6 @@
 from PyQt6.QtWidgets import QApplication, QWidget, QPushButton, QMainWindow, QLineEdit, QTextEdit, QVBoxLayout
 from PyQt6.QtCore import QSize, Qt
 import sys
-from random import choice
 import requests
 from time import sleep
 from bs4 import BeautifulSoup
