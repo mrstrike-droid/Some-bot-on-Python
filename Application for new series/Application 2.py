@@ -1,5 +1,6 @@
-from PyQt6.QtWidgets import QApplication, QWidget, QPushButton, QMainWindow, QLineEdit, QTextEdit, QVBoxLayout
+from PyQt6.QtWidgets import QApplication, QWidget, QPushButton, QMainWindow, QLineEdit, QTextEdit, QVBoxLayout, QTextBrowser
 from PyQt6.QtCore import QSize, Qt
+from PyQt6.QtGui import QTextCursor
 import sys
 import os
 import requests
@@ -29,12 +30,15 @@ class MainWindow(QWidget):
         self.inputField_serial = QLineEdit()
         self.inputField_serial.setPlaceholderText('Введите название сериала:')
         self.button_save = QPushButton('Сохранить', clicked=self.save_to_file)
+        self.button_delete = QPushButton('Удалить', clicked=self.delete_file)
         self.button_search = QPushButton('Поискать сериалы по списку', clicked=self.search_serials_by_list)
-        self.outputField = QTextEdit()
+        self.outputField = QTextBrowser()
+        self.outputField.setOpenExternalLinks(True)
 
 
         layout.addWidget(self.inputField_serial)
         layout.addWidget(self.button_save)
+        layout.addWidget(self.button_delete)
         layout.addWidget(self.button_search)
         layout.addWidget(self.outputField)
     
@@ -44,22 +48,39 @@ class MainWindow(QWidget):
             my_file.write(write_serial)
             my_file.close()
         self.inputField_serial.clear()
+    def delete_file(self):
+        my_file = open(f'{path}\my_file.txt', 'r')
+        delete_line = str(self.inputField_serial.text())
+        delete_line = delete_line.strip()
+        print(delete_line)
+        lst = []
+        for line in my_file:
+            print(line)
+            if delete_line == line.rstrip():
+                line = line.replace(delete_line,'')
+                print(line)
+            lst.append(line)
+            print(lst)
+        my_file.close()
+        my_file = open(f'{path}\my_file.txt', 'w')
+        for line in lst:
+            my_file.write(line)
+        my_file.close()
+        self.inputField_serial.clear()
     def search_serials_by_list(self):
         my_file = open(f'{path}\my_file.txt', "r")        
         for serial in my_file:            
             if serial.isspace():
                 continue
-            else:              
-                print('done')
+            else:         
                 serial = serial.rstrip()  
                 serial = serial.lower()                
                 for k,v in dict_with_set_of_date_and_serials.items():
-                    if serial not in v[0]:
-                        self.outputField.append(f'{k}: В этот день сериал не выходил')
-                    elif serial in v[0]:
+                    if serial in v[0]:
                         b=v[0].index(serial)
-                        self.outputField.append(f'{k}: Вышла новая серия\nСсылка: https://rezka.ag/{dict_with_set_of_date_and_serials[k][1][b]}')
-def parcer():
+                        self.outputField.append(f'{k}: Вышла новая серия {serial.capitalize()}')
+                        self.outputField.append(f'<a href=https://rezka.ag/{dict_with_set_of_date_and_serials[k][1][b]}>Ссылка</a> ')
+def parcer():           
         list_of_serial_names=[]
         tech_var_list=[]
         list_of_serial_urls=[]
