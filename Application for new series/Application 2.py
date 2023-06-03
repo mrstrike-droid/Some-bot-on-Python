@@ -6,6 +6,8 @@ import os
 import requests
 from time import sleep
 from bs4 import BeautifulSoup
+import threading
+
 
 app = QApplication(sys.argv)
 app.setStyleSheet('''
@@ -80,7 +82,8 @@ class MainWindow(QWidget):
                         b=v[0].index(serial)
                         self.outputField.append(f'{k}: Вышла новая серия {serial.capitalize()}')
                         self.outputField.append(f'<a href=https://rezka.ag/{dict_with_set_of_date_and_serials[k][1][b]}>Ссылка</a> ')
-def parcer():           
+def parcer():
+    while True:          
         list_of_serial_names=[]
         tech_var_list=[]
         list_of_serial_urls=[]
@@ -116,12 +119,14 @@ def parcer():
                 dict_with_set_of_date_and_serials[key] = value
                 list_of_lists.remove(value)
                 break
-        
-
-window = MainWindow()
-parcer()
-window.show()  # Важно: окно по умолчанию скрыто.
-
-# Запускаем цикл событий.
-
-app.exec()
+        sleep(3600)
+def main()  :
+    thread_parcer = threading.Thread(target=parcer)
+    thread_parcer.start()   
+    window = MainWindow()
+    window.show()  
+    app.exec()
+    thread_parcer.join()
+     
+if __name__ == "__main__":
+    main()
