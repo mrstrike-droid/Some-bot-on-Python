@@ -18,7 +18,7 @@ app.setStyleSheet('''
         font-size:15px;
     }
 ''')
-dict_with_set_of_date_and_serials = {}
+
 path=os.path.dirname(os.path.abspath(__file__))
 class MainWindow(QWidget):
     def __init__(self):
@@ -54,27 +54,26 @@ class MainWindow(QWidget):
         my_file = open(f'{path}\my_file.txt', 'r', encoding="utf-8")
         delete_line = str(self.inputField_serial.text())
         delete_line = delete_line.strip()
-        print(delete_line)
         lst = []
         for line in my_file:
-            print(line)
             if delete_line == line.rstrip():
                 line = line.replace(delete_line,'')
-                print(line)
             lst.append(line)
-            print(lst)
         my_file.close()
         my_file = open(f'{path}\my_file.txt', 'w', encoding="utf-8")
         for line in lst:
             my_file.write(line)
         my_file.close()
         self.inputField_serial.clear()
-    def search_serials_by_list(self):
+    def search_serials_by_list(self):        
         my_file = open(f'{path}\my_file.txt', "r", encoding="utf-8")        
         for serial in my_file:            
             if serial.isspace():
                 continue
-            else:         
+            else:
+                #sleep(1)
+                #self.outputField.clear()
+                #sleep(1) 
                 serial = serial.rstrip()  
                 serial = serial.lower()                
                 for k,v in dict_with_set_of_date_and_serials.items():
@@ -82,22 +81,28 @@ class MainWindow(QWidget):
                         b=v[0].index(serial)
                         self.outputField.append(f'{k}: Вышла новая серия {serial.capitalize()}')
                         self.outputField.append(f'<a href=https://rezka.ag/{dict_with_set_of_date_and_serials[k][1][b]}>Ссылка</a> ')
-def parcer():
-    while True:          
+class Parcer():
+    def __init__(self):
+        global list_of_serial_names, tech_var_list, list_of_serial_urls, list_of_lists, dict_with_set_of_date_and_serials
+        dict_with_set_of_date_and_serials = {}         
         list_of_serial_names=[]
         tech_var_list=[]
         list_of_serial_urls=[]
         list_of_lists=[]
+    def request_get(self):
+        global soup
         headers = {'user-agent': 'my-app/0.0.2'}
         url = 'https://rezka.ag'
         r = requests.get(url, headers=headers)
         soup = BeautifulSoup(r.text, 'lxml')
+    def find_text_and_urls(self):
         text_and_urls = soup.find('div', class_='b-content__inline_sidebar').find_all('div', class_='b-seriesupdate__block')
         for i in text_and_urls:
             tech_var= i.find_all('li', class_='b-seriesupdate__block_list_item') 
             list_of_serial_names=([x.find('div', class_='b-seriesupdate__block_list_item_inner').find('div', class_='cell cell-1').find('a', class_='b-seriesupdate__block_list_link').text.lower() for x in tech_var])
             list_of_serial_urls=([x.find('div', class_='b-seriesupdate__block_list_item_inner').find('div', class_='cell cell-1').find('a', class_='b-seriesupdate__block_list_link').get('href') for x in tech_var])
             list_of_lists.append([list_of_serial_names, list_of_serial_urls])
+    def find_date(self):
         date_var = soup.find('div', class_='b-content__inline_sidebar').find_all('div', class_='b-seriesupdate__block')
         for z in date_var:
             tech_var2=z.find_all('div', class_='b-seriesupdate__block_date')
@@ -113,17 +118,25 @@ def parcer():
                 y=str(y)
                 y=y.replace(' развернуть','')
                 tech_var_list.append(y) 
+    def create_dict(self):
         date_list = [k for k in tech_var_list if k != 'None']
         for key in date_list:
             for value in list_of_lists:
                 dict_with_set_of_date_and_serials[key] = value
                 list_of_lists.remove(value)
                 break
-        sleep(3600)
-def main()  :
-    thread_parcer = threading.Thread(target=parcer)
-    thread_parcer.start()   
+    def run(self):
+        while True:
+            self.request_get()
+            self.find_text_and_urls()
+            self.find_date()
+            self.create_dict()
+            sleep(3600)
+def main():
+    parcer=Parcer()
     window = MainWindow()
+    thread_parcer = threading.Thread(target=parcer.run)
+    thread_parcer.start()
     window.show()  
     app.exec()
     thread_parcer.join()
