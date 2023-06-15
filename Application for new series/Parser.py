@@ -4,26 +4,27 @@ from bs4 import BeautifulSoup
 import threading
 class Parcer():
     def __init__(self):
-        global soup, list_of_serial_names, tech_var_list, list_of_serial_urls, list_of_lists, dict_with_set_of_date_and_serials
+        global soup, list_of_serial_names, tech_var_list, list_of_serial_urls, list_of_lists, dict_with_set_of_date_and_serials, list_of_numbseries, list_of_translate_team
         dict_with_set_of_date_and_serials = {}
         list_of_serial_names=[]
         tech_var_list=[]
         list_of_serial_urls=[]
         list_of_lists=[]
+        list_of_numbseries = []
         headers = {'user-agent': 'my-app/0.0.2'}
         url = 'https://rezka.ag'
         r = requests.get(url, headers=headers)
         soup = BeautifulSoup(r.text, 'lxml')
     def find_text_and_urls(self):
-        global date_var
         text_and_urls = soup.find('div', class_='b-content__inline_sidebar').find_all('div', class_='b-seriesupdate__block')
         for i in text_and_urls:
-            tech_var= i.find_all('li', class_='b-seriesupdate__block_list_item') 
+            tech_var = i.find_all('li', class_='b-seriesupdate__block_list_item') 
             list_of_serial_names=([x.find('div', class_='b-seriesupdate__block_list_item_inner').find('div', class_='cell cell-1').find('a', class_='b-seriesupdate__block_list_link').text for x in tech_var])
             list_of_serial_urls=([x.find('div', class_='b-seriesupdate__block_list_item_inner').find('div', class_='cell cell-1').find('a', class_='b-seriesupdate__block_list_link').get('href') for x in tech_var])
-            list_of_lists.append([list_of_serial_names, list_of_serial_urls])
-        date_var = soup.find('div', class_='b-content__inline_sidebar').find_all('div', class_='b-seriesupdate__block')
+            list_of_numbseries = ([x.find('div', class_='b-seriesupdate__block_list_item_inner').find('span', class_='cell cell-2').text for x in tech_var])            
+            list_of_lists.append([list_of_serial_names, list_of_numbseries, list_of_serial_urls])
     def find_date(self):
+        date_var = soup.find('div', class_='b-content__inline_sidebar').find_all('div', class_='b-seriesupdate__block')
         for z in date_var:
             tech_var2=z.find_all('div', class_='b-seriesupdate__block_date')
             tech_var3=z.find_all('div', class_='b-seriesupdate__block_date collapsible')
@@ -45,6 +46,7 @@ class Parcer():
                 dict_with_set_of_date_and_serials[key] = value
                 list_of_lists.remove(value)
                 break
+        print(dict_with_set_of_date_and_serials)
     def search_serial_by_name(self):
         while True:
             serial = str(input('Напишите название сериала: '))
@@ -53,7 +55,7 @@ class Parcer():
                     print(f'{k}: В этот день сериал не выходил')
                 if serial in v[0]:
                     b=v[0].index(serial)
-                    print(f'{k}: {dict_with_set_of_date_and_serials[k][0][b]}\n Ссылка: https://rezka.ag/{dict_with_set_of_date_and_serials[k][1][b]}')
+                    print(f'{k}: {dict_with_set_of_date_and_serials[k][0][b]}\n  {dict_with_set_of_date_and_serials[k][1][b]}\n Ссылка: https://rezka.ag/{dict_with_set_of_date_and_serials[k][1][b]}')
             choice = str(input('Если хотите еще поискать сериалы напишите да, если не хотите, то напишите нет: '))
             if choice.lower() == 'нет':
                 break

@@ -66,29 +66,29 @@ class MainWindow(QWidget):
         my_file.close()
         self.inputField_serial.clear()
     def search_serials_by_list(self):        
-        my_file = open(f'{path}\my_file.txt', "r", encoding="utf-8")        
+        my_file = open(f'{path}\my_file.txt', "r", encoding="utf-8") 
+        self.outputField.clear()       
         for serial in my_file:            
             if serial.isspace():
                 continue
-            else:
-                #sleep(1)
-                #self.outputField.clear()
-                #sleep(1) 
+            else:                
                 serial = serial.rstrip()  
-                serial = serial.lower()                
-                for k,v in dict_with_set_of_date_and_serials.items():
-                    if serial in v[0]:
+                serial = serial.lower()                               
+                for k,v in dict_with_set_of_date_and_serials.items():                    
+                    if serial in v[0]:                        
                         b=v[0].index(serial)
-                        self.outputField.append(f'{k}: Вышла новая серия {serial.capitalize()}')
+                        number_of_series = dict_with_set_of_date_and_serials[k][1][b]
+                        self.outputField.append(f'{k}: Вышла {number_of_series} {serial.capitalize()}')
                         self.outputField.append(f'<a href=https://rezka.ag/{dict_with_set_of_date_and_serials[k][1][b]}>Ссылка</a> ')
 class Parcer():
     def __init__(self):
-        global list_of_serial_names, tech_var_list, list_of_serial_urls, list_of_lists, dict_with_set_of_date_and_serials
+        global list_of_serial_names, tech_var_list, list_of_serial_urls, list_of_lists, dict_with_set_of_date_and_serials, list_of_numbseries
         dict_with_set_of_date_and_serials = {}         
         list_of_serial_names=[]
         tech_var_list=[]
         list_of_serial_urls=[]
         list_of_lists=[]
+        list_of_numbseries = []
     def request_get(self):
         global soup
         headers = {'user-agent': 'my-app/0.0.2'}
@@ -101,7 +101,8 @@ class Parcer():
             tech_var= i.find_all('li', class_='b-seriesupdate__block_list_item') 
             list_of_serial_names=([x.find('div', class_='b-seriesupdate__block_list_item_inner').find('div', class_='cell cell-1').find('a', class_='b-seriesupdate__block_list_link').text.lower() for x in tech_var])
             list_of_serial_urls=([x.find('div', class_='b-seriesupdate__block_list_item_inner').find('div', class_='cell cell-1').find('a', class_='b-seriesupdate__block_list_link').get('href') for x in tech_var])
-            list_of_lists.append([list_of_serial_names, list_of_serial_urls])
+            list_of_numbseries = ([x.find('div', class_='b-seriesupdate__block_list_item_inner').find('span', class_='cell cell-2').text for x in tech_var])            
+            list_of_lists.append([list_of_serial_names, list_of_numbseries, list_of_serial_urls])
     def find_date(self):
         date_var = soup.find('div', class_='b-content__inline_sidebar').find_all('div', class_='b-seriesupdate__block')
         for z in date_var:
