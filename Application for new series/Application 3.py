@@ -82,23 +82,32 @@ class MainWindow(QWidget):
                         self.outputField.append(f'<a href=https://rezka.ag/{dict_with_set_of_date_and_serials[k][1][b]}>Ссылка</a> ')
 class Parcer():
     def __init__(self):
-        global list_of_serial_names, tech_var_list, list_of_serial_urls, list_of_lists, dict_with_set_of_date_and_serials, list_of_numbseries
-        dict_with_set_of_date_and_serials = {}         
+        global list_of_serial_names, tech_var_list, list_of_serial_urls, list_of_lists, dict_with_set_of_date_and_serials, list_of_numbseries, list_of_film, list_of_href_films
+        dict_with_set_of_date_and_serials={}         
         list_of_serial_names=[]
         tech_var_list=[]
         list_of_serial_urls=[]
         list_of_lists=[]
         list_of_numbseries = []
+        list_of_film=[]
+        list_of_href_films=[]
     def request_get(self):
         global soup
         headers = {'user-agent': 'my-app/0.0.2'}
         url = 'https://rezka.ag'
         r = requests.get(url, headers=headers)
         soup = BeautifulSoup(r.text, 'lxml')
+    def find_text_and_urls_for_films(self):
+        text_and_urls_for_films = soup.find('div', class_='b-newest_slider_wrapper').find('div', class_='b-newest_slider').find('div', class_='b-newest_slider__wrapper').find('div', class_='b-newest_slider__inner').find_all('div', class_='b-newest_slider__list cat-visible')
+        for i in text_and_urls_for_films:
+            tech_var_5=i.find_all('div', class_='b-content__inline_item')
+            list_of_film_names=([x.find('div', class_='b-content__inline_item-link').find('a').text.lower() for x in tech_var_5])
+            list_of_film_urls=([x.find('div', class_='b-content__inline_item-link').find('a').get('href') for x in tech_var_5])
+            print(list_of_film_urls)
     def find_text_and_urls(self):
         text_and_urls = soup.find('div', class_='b-content__inline_sidebar').find_all('div', class_='b-seriesupdate__block')
         for i in text_and_urls:
-            tech_var= i.find_all('li', class_='b-seriesupdate__block_list_item') 
+            tech_var=i.find_all('li', class_='b-seriesupdate__block_list_item') 
             list_of_serial_names=([x.find('div', class_='b-seriesupdate__block_list_item_inner').find('div', class_='cell cell-1').find('a', class_='b-seriesupdate__block_list_link').text.lower() for x in tech_var])
             list_of_serial_urls=([x.find('div', class_='b-seriesupdate__block_list_item_inner').find('div', class_='cell cell-1').find('a', class_='b-seriesupdate__block_list_link').get('href') for x in tech_var])
             list_of_numbseries = ([x.find('div', class_='b-seriesupdate__block_list_item_inner').find('span', class_='cell cell-2').text for x in tech_var])            
@@ -125,10 +134,11 @@ class Parcer():
             for value in list_of_lists:
                 dict_with_set_of_date_and_serials[key] = value
                 list_of_lists.remove(value)
-                break
+                break    
     def run(self):
         while True:
             self.request_get()
+            self.find_text_and_urls_for_films()
             self.find_text_and_urls()
             self.find_date()
             self.create_dict()
