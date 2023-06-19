@@ -80,9 +80,16 @@ class MainWindow(QWidget):
                         number_of_series = dict_with_set_of_date_and_serials[k][1][b]
                         self.outputField.append(f'{k}: Вышла {number_of_series} {serial.capitalize()}')
                         self.outputField.append(f'<a href=https://rezka.ag/{dict_with_set_of_date_and_serials[k][1][b]}>Ссылка</a> ')
+        for film in my_file:            
+            if film.isspace():
+                continue
+            else:                
+                film = serial.rstrip()  
+                film = serial.lower()
+                  
 class Parcer():
     def __init__(self):
-        global list_of_serial_names, tech_var_list, list_of_serial_urls, list_of_lists, dict_with_set_of_date_and_serials, list_of_numbseries, list_of_film, list_of_href_films
+        global list_of_serial_names, tech_var_list, list_of_serial_urls, list_of_lists, dict_with_set_of_date_and_serials, list_of_numbseries, list_of_film, list_of_href_films, list_of_lists_of_films
         dict_with_set_of_date_and_serials={}         
         list_of_serial_names=[]
         tech_var_list=[]
@@ -91,6 +98,7 @@ class Parcer():
         list_of_numbseries = []
         list_of_film=[]
         list_of_href_films=[]
+        list_of_lists_of_films=[]
     def request_get(self):
         global soup
         headers = {'user-agent': 'my-app/0.0.2'}
@@ -98,12 +106,16 @@ class Parcer():
         r = requests.get(url, headers=headers)
         soup = BeautifulSoup(r.text, 'lxml')
     def find_text_and_urls_for_films(self):
-        text_and_urls_for_films = soup.find('div', class_='b-newest_slider_wrapper').find('div', class_='b-newest_slider').find('div', class_='b-newest_slider__wrapper').find('div', class_='b-newest_slider__inner').find_all('div', class_='b-newest_slider__list cat-visible')
+        text_and_urls_for_films = soup.find('div', class_='b-newest_slider_wrapper').find('div', class_='b-newest_slider').find('div', class_='b-newest_slider__wrapper').find('div', class_='b-newest_slider__inner').find('div', class_='b-newest_slider__list cat-visible').find_all('div', class_='b-content__inline_item') 
         for i in text_and_urls_for_films:
-            tech_var_5=i.find_all('div', class_='b-content__inline_item')
-            list_of_film_names=([x.find('div', class_='b-content__inline_item-link').find('a').text.lower() for x in tech_var_5])
-            list_of_film_urls=([x.find('div', class_='b-content__inline_item-link').find('a').get('href') for x in tech_var_5])
-            print(list_of_film_urls)
+            choice_var=i.find('div', class_='b-content__inline_item-link').find('a').get('href')
+            if '/films/' in choice_var:
+                list_of_film.append(i.find('div', class_='b-content__inline_item-link').find('a').text.lower())
+                list_of_href_films.append(i.find('div', class_='b-content__inline_item-link').find('a').get('href'))
+            else:
+                continue
+        list_of_lists_of_films.append(list_of_film)
+        list_of_lists_of_films.append(list_of_href_films)
     def find_text_and_urls(self):
         text_and_urls = soup.find('div', class_='b-content__inline_sidebar').find_all('div', class_='b-seriesupdate__block')
         for i in text_and_urls:
