@@ -33,7 +33,7 @@ class MainWindow(QWidget):
         self.inputField_serial.setPlaceholderText('Введите название сериала:')
         self.button_save = QPushButton('Сохранить', clicked=self.save_to_file)
         self.button_delete = QPushButton('Удалить', clicked=self.delete_file)
-        self.button_search = QPushButton('Поискать сериалы по списку', clicked=self.search_serials_by_list)
+        self.button_search = QPushButton('Поискать фильмы или сериалы', clicked=self.search_serials_by_list)
         self.outputField = QTextBrowser()
         self.outputField.setOpenExternalLinks(True)
 
@@ -80,13 +80,11 @@ class MainWindow(QWidget):
                         number_of_series = dict_with_set_of_date_and_serials[k][1][b]
                         self.outputField.append(f'{k}: Вышла {number_of_series} {serial.capitalize()}')
                         self.outputField.append(f'<a href=https://rezka.ag/{dict_with_set_of_date_and_serials[k][1][b]}>Ссылка</a> ')
-        for film in my_file:            
-            if film.isspace():
-                continue
-            else:                
-                film = serial.rstrip()  
-                film = serial.lower()
-                  
+                for i in list_of_lists_of_films:
+                    if serial in i:
+                        a=i.index(serial)   
+                        self.outputField.append(f'Вышел фильм {serial.capitalize()}')
+                        self.outputField.append(f'<a href=https://rezka.ag/{list_of_lists_of_films[1][a]}>Ссылка</a> ')
 class Parcer():
     def __init__(self):
         global list_of_serial_names, tech_var_list, list_of_serial_urls, list_of_lists, dict_with_set_of_date_and_serials, list_of_numbseries, list_of_film, list_of_href_films, list_of_lists_of_films
@@ -149,11 +147,13 @@ class Parcer():
                 break    
     def run(self):
         while True:
+            thread_find_films = threading.Thread(target=self.find_text_and_urls_for_films)
             self.request_get()
-            self.find_text_and_urls_for_films()
+            thread_find_films.start()
             self.find_text_and_urls()
             self.find_date()
             self.create_dict()
+            thread_find_films.join()
             sleep(3600)
 def main():
     parcer=Parcer()
