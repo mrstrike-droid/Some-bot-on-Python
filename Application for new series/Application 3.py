@@ -65,9 +65,9 @@ class MainWindow(QWidget):
             my_file.write(line)
         my_file.close()
         self.inputField_serial.clear()
-    def search_serials_by_list(self):        
+    def search_serials_by_list(self):
+        self.outputField.clear()          
         my_file = open(f'{path}\my_file.txt', "r", encoding="utf-8") 
-        self.outputField.clear()       
         for serial in my_file:            
             if serial.isspace():
                 continue
@@ -79,7 +79,7 @@ class MainWindow(QWidget):
                         b=v[0].index(serial)
                         number_of_series = dict_with_set_of_date_and_serials[k][1][b]
                         self.outputField.append(f'{k}: Вышла {number_of_series} {serial.capitalize()}')
-                        self.outputField.append(f'<a href=https://rezka.ag/{dict_with_set_of_date_and_serials[k][1][b]}>Ссылка</a> ')
+                        self.outputField.append(f'<a href=https://rezka.ag/{dict_with_set_of_date_and_serials[k][2][b]}>Ссылка</a> ')
                 for i in list_of_lists_of_films:
                     if serial in i:
                         a=i.index(serial)   
